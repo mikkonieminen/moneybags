@@ -157,6 +157,8 @@
           labels.push(selectedData[i].timespanValue);
           values.push(selectedData[i].value);
         }
+        labels.reverse();
+        values.reverse();
         chartData.labels = labels;
         chartData.datasets[0].data = values;
         console.log('Chart data', chartData);
