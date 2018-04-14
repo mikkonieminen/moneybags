@@ -46,7 +46,7 @@
             </thead>
 
             <tbody>
-              <tr v-for='(stock, index) in stocks' 
+              <tr v-on:click='() => toStockPage(stock.id)' v-for='(stock, index) in stocks' 
                 v-bind:index='index' 
                 v-bind:stock='stock'
                 v-bind:key='stock.id'>
@@ -119,6 +119,9 @@ export default {
     getLatestStockPrice(stock) {
       return stock && stock.tickers && stock.tickers.length > 0 ?
         stock.tickers[0].price : 0;
+    },
+    toStockPage(id) {
+      this.$router.push(`/stocks/${id}`);
     }
   },
 };
