@@ -8,6 +8,7 @@ import VModal from 'vue-js-modal';
 
 import Login from 'components/Login';
 import Stocks from 'components/Stocks';
+import Stock from 'components/Stock';
 
 import Auth from './auth';
 import App from './App';
@@ -38,6 +39,12 @@ const routes = [
     name: 'stocks',
     path: '/',
     component: Stocks,
+    meta: { requiresAuth: false }
+  },
+  {
+    name: 'stock',
+    path: '/stocks/:id',
+    component: Stock,
     meta: { requiresAuth: false }
   },
 ];
