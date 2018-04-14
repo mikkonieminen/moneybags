@@ -14,7 +14,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <li><router-link :to="{ path: '/' }">Home</router-link></li>
+            <li><router-link :to="{ path: '/' }">Stocks</router-link></li>
             <li v-if="userAuthenticated === true"><a href="" @click="logout()">Logout</a></li>
             <li v-if="userAuthenticated === false"><router-link :to="{ path: '/login' }">Login</router-link></li>
           </ul>

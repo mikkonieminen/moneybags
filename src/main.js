@@ -7,6 +7,7 @@ import VueProgressBar from 'vue-progressbar';
 import VModal from 'vue-js-modal';
 
 import Login from 'components/Login';
+import Stocks from 'components/Stocks';
 
 import Auth from './auth';
 import App from './App';
@@ -31,6 +32,12 @@ const routes = [
     name: 'login',
     path: '/login',
     component: Login,
+    meta: { requiresAuth: false }
+  },
+  {
+    name: 'stocks',
+    path: '/',
+    component: Stocks,
     meta: { requiresAuth: false }
   },
 ];

@@ -25,7 +25,7 @@ export default {
   logout(context) {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_role');
-    Vue.http.headers.delete('Authorization');
+    // Vue.http.headers.delete('Authorization');
     context.$store.dispatch('logout');
     context.$router.push('login');
   },
@@ -52,7 +52,7 @@ export default {
       return;
     }
 
-    Vue.http.headers.delete('Authorization');
+    // Vue.http.headers.delete('Authorization');
     context.$store.dispatch('logout');
     context.$router.push('login');
 
