@@ -42,6 +42,10 @@
                     </span>
                   </a>
                 </th>
+                <th>P/E</th>
+                <th>P/B</th>
+                <th>P/S</th>
+                <th>EPS</th>
               </tr>
             </thead>
 
@@ -52,6 +56,10 @@
                 v-bind:key='stock.id'>
                 <td>{{ stock.name }}</td>
                 <td>{{ getLatestStockPrice(stock) }}</td>
+                <td>{{ getPriceToFigureKey(stock, 'Tulos/osake (EPS), euroa') }}</td>
+                <td>{{ getPriceToFigureKey(stock, 'Oma pääoma/osake, euroa') }}</td>
+                <td>{{ divideFigures(stock, 'Markkina-arvo (P)', 'Liikevaihto') }}</td>
+                <td>{{ getFigure(stock, 'Tulos/osake (EPS), euroa') }}</td>
               </tr>
             </tbody>
           </table>
@@ -63,7 +71,6 @@
 </template>
 
 <script>
-import Promise from 'bluebird';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -119,6 +126,21 @@ export default {
     getLatestStockPrice(stock) {
       return stock && stock.tickers && stock.tickers.length > 0 ?
         stock.tickers[0].price : 0;
+    },
+    getPriceToFigureKey(stock, figureKey) {
+      const price = stock.tickers && stock.tickers.length > 0 ?
+        stock.tickers[0].price : 0;
+      const figure = stock.figures.find(item => item.name === figureKey);
+      return figure && figure.value ? (parseFloat(price) / parseFloat(figure.value)).toFixed(2) : '-';
+    },
+    divideFigures(stock, figure1, figure2) {
+      const numerator = stock.figures.find(item => item.name === figure1);
+      const denominator = stock.figures.find(item => item.name === figure2);
+      return numerator && denominator ? (numerator.value / denominator.value).toFixed(2) : '-';
+    },
+    getFigure(stock, figureKey) {
+      const figure = stock.figures.find(item => item.name === figureKey);
+      return figure ? figure.value : '-';
     }
   },
 };
