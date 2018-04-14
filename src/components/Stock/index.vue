@@ -134,16 +134,17 @@
               label: 'Value',
               lineTension: 0,
               borderWidth: 2,
-              borderColor: '#ff2299',
+              borderColor: '#93A5CF',
               pointRadius: 3,
               pointBorderWidth: 0,
               pointHitRadius: [30, 30],
-              pointBackgroundColor: 'red',
+              pointBackgroundColor: '#666',
               backgroundColor: 'transparent',
             }
           ]
         },
-        chartOptions: {},
+        chartOptions: {
+        },
         selectedName: false,
         selectedData: null,
       };

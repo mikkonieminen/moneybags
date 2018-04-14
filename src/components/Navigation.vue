@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <router-link class="navbar-brand" :to="{ path: '/' }"><span class="fa fa-money"></span></router-link>
+          <router-link class="navbar-brand" :to="{ path: '/' }"><span class="fa fa-money fa-lg"></span></router-link>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
