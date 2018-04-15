@@ -42,24 +42,47 @@
                     </span>
                   </a>
                 </th>
-                <th>P/E</th>
-                <th>P/B</th>
-                <th>P/S</th>
-                <th>EPS</th>
+                <th @click="sort('priceToEarnings')">
+                  <a href="#">P/E 
+                    <span v-if="order === 'priceToEarnings'" 
+                      v-bind:class="[ direction === 'asc' ? 'fa fa-caret-up':'fa fa-caret-down' ]">
+                    </span>
+                  </a>
+                </th>
+                <th @click="sort('priceToBooking')">
+                  <a href="#">P/B 
+                    <span v-if="order === 'priceToBooking'" 
+                      v-bind:class="[ direction === 'asc' ? 'fa fa-caret-up':'fa fa-caret-down' ]">
+                    </span>
+                  </a>
+                </th>
+                <th @click="sort('priceToSales')">
+                  <a href="#">P/S 
+                    <span v-if="order === 'priceToSales'" 
+                      v-bind:class="[ direction === 'asc' ? 'fa fa-caret-up':'fa fa-caret-down' ]">
+                    </span>
+                  </a>
+                </th>
+                <th>
+                  <a href="#">EPS 
+                    <span v-if="order === 'earningsPerShare'" 
+                      v-bind:class="[ direction === 'asc' ? 'fa fa-caret-up':'fa fa-caret-down' ]">
+                    </span>
+                  </a>
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for='(stock, index) in stocks' 
-                v-bind:index='index' 
+              <tr v-for='stock in orderedItems'
                 v-bind:stock='stock'
                 v-bind:key='stock.id'>
                 <td>{{ stock.name }}</td>
-                <td>{{ getLatestStockPrice(stock) }}</td>
-                <td>{{ getPriceToFigureKey(stock, 'Tulos/osake (EPS), euroa') }}</td>
-                <td>{{ getPriceToFigureKey(stock, 'Oma pääoma/osake, euroa') }}</td>
-                <td>{{ divideFigures(stock, 'Markkina-arvo (P)', 'Liikevaihto') }}</td>
-                <td>{{ getFigure(stock, 'Tulos/osake (EPS), euroa') }}</td>
+                <td>{{ stock.price }}</td>
+                <td>{{ stock.priceToEarnings }}</td>
+                <td>{{ stock.priceToBooking }}</td>
+                <td>{{ stock.priceToSales }}</td>
+                <td>{{ stock.earningsPerShare }}</td>
               </tr>
             </tbody>
           </table>
@@ -86,6 +109,15 @@ export default {
     this.getData();
   },
   computed: {
+    orderedItems() {
+      return this.stocks.sort((a, b) => {
+        let modifier = 1;
+        if (this.direction === 'desc') modifier = -1;
+        if (a[this.order] < b[this.order]) return -1 * modifier;
+        if (a[this.order] > b[this.order]) return 1 * modifier;
+        return 0;
+      });
+    },
     ...mapGetters({
       stocks: 'stocks',
     }),
@@ -99,7 +131,6 @@ export default {
         this.direction = 'asc';
       }
       this.order = order;
-      this.getData();
     },
     clearSearch() {
       this.keyword = null;
@@ -110,12 +141,21 @@ export default {
       this.$http.get('stocks', {
         params: {
           keyword: this.keyword,
+          year: '2017',
           order: `${this.order}_${this.direction}`
         },
       })
       .then((response) => {
         if (response.body && response.body.stocks) {
-          this.$store.dispatch('setStocks', response.body.stocks);
+          const stocks = response.body.stocks;
+          stocks.forEach((item, i) => {
+            stocks[i].price = this.getLatestStockPrice(item);
+            stocks[i].priceToEarnings = this.getPriceToFigureKey(item, 'Tulos/osake (EPS), euroa');
+            stocks[i].priceToBooking = this.getPriceToFigureKey(item, 'Oma pääoma/osake, euroa');
+            stocks[i].priceToSales = this.divideFigures(item, 'Markkina-arvo (P)', 'Liikevaihto');
+            stocks[i].earningsPerShare = this.getFigure(item, 'Tulos/osake (EPS), euroa');
+          });
+          this.$store.dispatch('setStocks', stocks);
           this.$Progress.finish();
         }
       })

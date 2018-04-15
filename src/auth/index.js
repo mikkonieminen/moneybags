@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 const LOGIN_URL = 'login';
 
 export default {
