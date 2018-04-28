@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
-const filter = (text, stop, clamp) => text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
+Vue.filter('truncate', (text, stop, clamp) => {
+  return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
+});
 
-Vue.filter('truncate', filter);
+Vue.filter('currency', (value) => {
+  return `${parseFloat(value).toFixed(2)} €`;
+});

@@ -39,6 +39,7 @@ module.exports = {
     'no-undef': ['warn'],
     'no-param-reassign': ['off'],
     'arrow-body-style': ['off'],
-    "brace-style": [ 'warn', 'stroustrup', { 'allowSingleLine': false } ],
+    'brace-style': [ 'warn', 'stroustrup', { 'allowSingleLine': false } ],
+    'linebreak-style': ['off']
   }
 }

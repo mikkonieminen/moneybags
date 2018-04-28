@@ -35,6 +35,7 @@
                     </span>
                   </a>
                 </th>
+                <th>Symbol</th>
                 <th @click="sort('price')" class='condensed'>
                   <a href="#">Price 
                     <span v-if="order === 'price'" 
@@ -78,7 +79,8 @@
                 v-bind:stock='stock'
                 v-bind:key='stock.id'>
                 <td>{{ stock.name }}</td>
-                <td>{{ stock.price }}</td>
+                <td>{{ stock.tickers && stock.tickers.length > 0 ? stock.tickers[0].symbol : '-' }}</td>
+                <td class="nowrap">{{ stock.price | currency }}</td>
                 <td>{{ stock.priceToEarnings }}</td>
                 <td>{{ stock.priceToBooking }}</td>
                 <td>{{ stock.priceToSales }}</td>
@@ -111,6 +113,11 @@ export default {
   computed: {
     orderedItems() {
       return this.stocks.sort((a, b) => {
+        if (this.isNumeric(a[this.order]) && this.isNumeric(b[this.order])) {
+          a[this.order] = +a[this.order];
+          b[this.order] = +b[this.order];
+        }
+
         let modifier = 1;
         if (this.direction === 'desc') modifier = -1;
         if (a[this.order] < b[this.order]) return -1 * modifier;
@@ -181,6 +188,9 @@ export default {
     getFigure(stock, figureKey) {
       const figure = stock.figures.find(item => item.name === figureKey);
       return figure ? figure.value : '-';
+    },
+    isNumeric(num) {
+      return !isNaN(num);
     }
   },
 };
