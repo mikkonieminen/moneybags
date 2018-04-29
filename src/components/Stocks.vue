@@ -24,7 +24,8 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div class="table-responsive">
+        <h1 class="text-center" v-if='loading'>Loading...</h1>
+        <div class="table-responsive" v-if='!loading'>
           <table class='table table-condensed table-striped table-bordered table-hover'>
             <thead>
               <tr>
@@ -78,7 +79,11 @@
               <tr v-for='stock in orderedItems'
                 v-bind:stock='stock'
                 v-bind:key='stock.id'>
-                <td>{{ stock.name }}</td>
+                <td>
+                  <router-link :to='{ path: `/stocks/${stock.id}` }'>
+                    {{ stock.name }}
+                  </router-link>
+                </td>
                 <td>{{ stock.tickers && stock.tickers.length > 0 ? stock.tickers[0].symbol : '-' }}</td>
                 <td class="nowrap">{{ stock.price | currency }}</td>
                 <td>{{ stock.priceToEarnings }}</td>
@@ -102,6 +107,7 @@ export default {
   name: 'stocks',
   data() {
     return {
+      loading: false,
       keyword: null,
       order: 'name',
       direction: 'asc'
@@ -144,7 +150,7 @@ export default {
       this.getData();
     },
     getData() {
-      this.$Progress.start();
+      this.loading = true;
       this.$http.get('stocks', {
         params: {
           keyword: this.keyword,
@@ -163,11 +169,11 @@ export default {
             stocks[i].earningsPerShare = this.getFigure(item, 'Tulos/osake (EPS), euroa');
           });
           this.$store.dispatch('setStocks', stocks);
-          this.$Progress.finish();
+          this.loading = false;
         }
       })
       .catch(() => {
-        this.$Progress.fail();
+        this.loading = false;
       });
     },
     getLatestStockPrice(stock) {

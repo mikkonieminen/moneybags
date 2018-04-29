@@ -2,7 +2,6 @@
   <div id="app">
     <navigation></navigation>
     <router-view class="wrapper container-fluid"></router-view>
-    <vue-progress-bar></vue-progress-bar>
   </div>
 </template>
 
